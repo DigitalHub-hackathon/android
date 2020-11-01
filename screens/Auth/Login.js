@@ -1,21 +1,34 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, StatusBar, AsyncStorage, NativeModules } from 'react-native';
 
-export default class App extends React.Component {
+export default class Login extends React.Component {
   state={
     email:"",
-    password:""
+    password:"",
+    user: []
   }
-  
+
+  async checkLogin(){
+    const user = await AsyncStorage.getItem(this.state.email)
+
+    this.setState({user: JSON.parse(user)})
+    if (this.state.password === this.state.user.password){
+      AsyncStorage.setItem('Active', this.state.email)
+      NativeModules.DevSettings.reload()
+    }
+  }
+
   render(){
+    const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
         <StatusBar color={'#003f5c'} />
-        <Image source={require('../assets/gerb.png')} style={{ width: 100, resizeMode: 'contain'}}/>
+        <Text style={styles.logo}>Вход</Text>
+        <Image source={require('../../assets/gerb.png')} style={{ width: 100, resizeMode: 'contain'}}/>
         <View style={styles.inputView} >
           <TextInput  
             style={styles.inputText}
-            placeholder="Логин" 
+            placeholder="Email" 
             placeholderTextColor="white"
             onChangeText={text => this.setState({email:text})}/>
         </View>
@@ -27,10 +40,10 @@ export default class App extends React.Component {
             placeholderTextColor="white"
             onChangeText={text => this.setState({password:text})}/>
         </View>
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onPress={() => this.checkLogin()}>
           <Text style={styles.loginText}>ВОЙТИ</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate('Register')}>
           <Text style={styles.loginText}>Зарегистрироваться</Text>
         </TouchableOpacity>
 
@@ -48,8 +61,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo:{
-    fontWeight:"bold",
-    fontSize:50,
+    fontFamily: 'Yanone',
+    fontSize:60,
     color:"#fb5b5a",
     marginBottom:40
   },
@@ -63,6 +76,8 @@ const styles = StyleSheet.create({
     padding:20
   },
   inputText:{
+    fontFamily: 'Yanone',
+    fontSize: 17,
     height:50,
     color:"white",
     opacity: 0.8
@@ -73,6 +88,8 @@ const styles = StyleSheet.create({
   },
   loginBtn:{
     width:"80%",
+    fontFamily: 'Yanone',
+    fontSize: 17,
     backgroundColor:"#fb5b5a",
     borderRadius:25,
     height:50,
@@ -82,6 +99,8 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   loginText:{
+    fontFamily: 'Yanone',
+    fontSize: 17,
     color:"white"
   }
 });

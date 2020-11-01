@@ -1,16 +1,28 @@
 import React, {useState} from 'react'
 import { View, Text, TouchableWithoutFeedback, Animated, Dimensions, StyleSheet, TouchableOpacity} from 'react-native'
 import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { NavigationContainer } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons'; 
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { createStackNavigator } from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons' 
 import { FontAwesome } from '@expo/vector-icons' 
-import { AntDesign } from "@expo/vector-icons";
-
+import 'react-native-gesture-handler';
 import AboutMe from './screens/AboutMe'
 import Books from './screens/Books'
 import Events from './screens/Events'
 import Places from './screens/Places'
+import SomeEvent from './screens/SomeEvent'
+
+const Stack = createStackNavigator()
+
+function StackNavigator(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name='Мероприятия' component={Events} options={{ headerShown: false}}/>
+      <Stack.Screen name='Конкретное' component={SomeEvent} options={{ headerShown: false}}/>
+    </Stack.Navigator>
+  )
+}
 
 
 const BottomTab = createBottomTabNavigator()
@@ -21,22 +33,10 @@ export default function BottomTabNavigator(){
         <View style={{ flex: 1, position: "relative"}}>
         <NavigationContainer>
             <BottomTab.Navigator tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}>
-                <BottomTab.Screen name='Мероприятия' component={Events} 
-                options={{
-                    tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color="black" />,
-                  }}/>
-                <BottomTab.Screen name='Кружки' component={Places} 
-                options={{
-                    tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-group" size={24} color="black" />,
-                  }}/>
-                <BottomTab.Screen name='Книги' component={Books} 
-                options={{
-                    tabBarIcon: ({ color }) => <FontAwesome name="book" size={24} color="black" />,
-                  }}/>
-                <BottomTab.Screen name='Профиль' component={AboutMe} 
-                options={{
-                    tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account" size={24} color="black" />,
-                  }}/>
+                <BottomTab.Screen name='Мероприятия' component={StackNavigator} />
+                <BottomTab.Screen name='Кружки' component={Places} />
+                {/*<BottomTab.Screen name='Книги' component={Books} />*/}
+                <BottomTab.Screen name='Профиль' component={AboutMe} />
             </BottomTab.Navigator>
         </NavigationContainer>
         </View>
@@ -49,10 +49,10 @@ type Props = {
 };
 const BottomMenuItem = ({ iconName, isCurrent }: Props) => {
     const images = {
-        'Мероприятия': <MaterialIcons name="event" size={24} style={{ color: isCurrent ? '#FF5757' : 'grey' }} />, 
-        'Кружки': <MaterialCommunityIcons name="account-group" size={24} style={{ color: isCurrent ? '#00C2CB' : 'grey' }} />, 
-        'Книги': <FontAwesome name="book" size={24} style={{ color: isCurrent ? '#FFDE59' : 'grey' }} />, 
-        'Профиль': <MaterialCommunityIcons name="account" size={24} style={{ color: isCurrent ? '#7ED957' : 'grey' }} />}
+        'Мероприятия': <MaterialIcons name="event" size={24} style={{ color: isCurrent ? '#FF5757' : 'white' }} />, 
+        'Кружки': <MaterialCommunityIcons name="account-group" size={24} style={{ color: isCurrent ? '#FF5757' : 'white' }} />, 
+        'Книги': <FontAwesome name="book" size={24} style={{ color: isCurrent ? '#FF5757' : 'white' }} />, 
+        'Профиль': <MaterialCommunityIcons name="account" size={24} style={{ color: isCurrent ? '#FF5757' : 'white' }} />}
     return (
       <View
         style={{
@@ -62,7 +62,7 @@ const BottomMenuItem = ({ iconName, isCurrent }: Props) => {
         }}
       >
         {images[iconName]}
-        <Text style={{ fontFamily: 'Yanone' }}>{iconName}</Text>
+        <Text style={{ fontFamily: 'Yanone', color: 'white' }}>{iconName}</Text>
       </View>
     );
 };
@@ -152,7 +152,7 @@ const style = StyleSheet.create({
       },
       shadowOpacity: 0.1,
       shadowRadius: 4.0,
-      backgroundColor: "white",
+      backgroundColor: "#465881",
       borderTopRightRadius: 20,
       borderTopLeftRadius: 20,
       elevation: 10,
@@ -164,7 +164,7 @@ const style = StyleSheet.create({
       position: "absolute",
       top: 0,
       left: 10,
-      backgroundColor: 'gray',
+      backgroundColor: '#fb5b5a',
       borderRadius: 10,
       width: 50
   },

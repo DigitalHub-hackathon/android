@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     container: {
         width: Dimensions.get('window').width - 20,
         minHeight: 80,
-        backgroundColor: 'white',
+        backgroundColor: '#465881',
         borderRadius: 15,
         marginLeft: 10,
         marginTop: 10,
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginLeft: 10,
         marginTop: 10,
-        marginBottom: 30
+        marginBottom: 30,
+        color: 'white'
     },
 
     date: {
@@ -47,13 +48,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 5,
         left: 10,
+        color: 'white'
     },
 
     favourite: {
         height: 20,
         width: 80,
         opacity: 0.9,
-        backgroundColor: '#FFDE59',
+        backgroundColor: '#A62929',
         alignItems: 'center',
         borderRadius: 10,
         position: 'absolute',

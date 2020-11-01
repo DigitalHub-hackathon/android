@@ -1,56 +1,50 @@
 import { StatusBar } from 'expo-status-bar'
-import React, { PureComponent } from 'react'
+import React, { PureComponent, useState } from 'react'
 import { AsyncStorage } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Navigation from './Navigation'
-import Login from './screens/Login'
-
-import useCachedResources from './hooks/useCachedResources';
+import BottomTabNavigation from './Navigation'
+import StackNavigation from './StackNavigation'
 import { useFonts } from 'expo-font';
 
-_retrieveData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('TASKS');
-    if (value !== null) {
-      // We have data!!
-      console.log(value);
-      return value
-    }
-    else{
-      return null
-    }
-  } catch (error) {
-    // Error retrieving data
-  }
-};
+
+
 
 export default function App(){
-  const isLoadingComplete = useCachedResources();
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('Active')
+      setData(value)
+      
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  let [data, setData] = useState(null)
 
   let [fontsLoaded] = useFonts({
     'Yanone': require('./assets/fonts/YanoneKaffeesatz-Regular.otf'),
   });
 
-  const value = _retrieveData()
-  
-
-  if (!isLoadingComplete) {
+  _retrieveData()
+  console.log(data)
+  if (!fontsLoaded) {
     return null;
-  } else {
-    if(value !== null){
+  } else if (data !== 'null' && data !== null){
+    
       return (
         <SafeAreaProvider>
-          <Navigation />
-          <StatusBar backgroundColor={null}/>
+          <BottomTabNavigation />
+          <StatusBar backgroundColor={'#A62929'}/>
         </SafeAreaProvider>
       );
-    }
-    else{
-      return(
-        <Login />
-      )
-    }
   }
-
-  //return (<Login />)
+  else{
+    return (
+      <SafeAreaProvider>
+        <StackNavigation />
+        <StatusBar backgroundColor={'#003f5c'}/>
+      </SafeAreaProvider>
+      )
+  }
 }
