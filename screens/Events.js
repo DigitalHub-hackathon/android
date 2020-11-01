@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { StyleSheet, Text, View, Dimensions, ScrollView, SafeAreaView, TouchableWithoutFeedback, Image } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, ScrollView, SafeAreaView, TouchableWithoutFeedback, Image, AsyncStorage } from 'react-native'
 import Header from '../modules/Header'
 import { MaterialIcons } from '@expo/vector-icons'
 import EventBlock from '../modules/EventBlock'
@@ -10,7 +10,9 @@ export default class Events extends PureComponent {
         liked_events: [],
         visible: false,
         email: '',
-        likes: ''
+        likes: '',
+        user: '',
+        liked: []
     }
 
     async componentDidMount(){
@@ -18,6 +20,9 @@ export default class Events extends PureComponent {
             const orgApiCall = await fetch('http://193.187.173.215/api/events/0', {method: 'GET'})
             const events = await orgApiCall.json()
             this.setState({ events: events})
+
+            const email = await AsyncStorage.getItem('Active')
+            this.setState({email: email})
         }
         catch(err){}
     }
@@ -38,9 +43,11 @@ export default class Events extends PureComponent {
         else{
             this.setState({likes: this.state.likes + '%20' + this.state.events[Number(info)].id})
         }
-        
+        var array = this.state.liked
+        array = array.pop(this.state.events[Number(info)])
+        this.setState({liked: array})
 
-        console.log(this.state.likes)
+        AsyncStorage.setItem(this.state.email + "_events", JSON.stringify(this.state.liked))
     }
 
 
@@ -52,7 +59,7 @@ export default class Events extends PureComponent {
                 {this.state.visible === true ? 
                     <View style={{ backgroundColor: 'white', width: 200, height: 50, borderRadius: 15, opacity: 0.7, position: 'absolute', top: Dimensions.get('window').height / 2, alignSelf: 'center', zIndex: 3, alignItems: 'center'}}>
                         <Text style={{ fontFamily: 'Yanone', fontSize: 30, textAlignVertical: 'center', height: 50}}>Отлично!</Text>
-                    </View> : null}
+                </View> : null}
                 <Header name={'Мероприятия'} color={'#A62929'} image={<MaterialIcons style={{ position: "absolute", right: 10, bottom: 5, opacity: 0.5}} name="event" size={40} color="white" />} onRefresh={() => this.sendReq()}/>
                 <View style={{ backgroundColor: 'white', minHeight: Dimensions.get('window').height, backgroundColor: '#003f5c' }}>
                     <ScrollView style={{ paddingTop: 10 }}>

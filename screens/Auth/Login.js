@@ -14,7 +14,8 @@ export default class Login extends React.Component {
     this.setState({user: JSON.parse(user)})
     if (this.state.password === this.state.user.password){
       AsyncStorage.setItem('Active', this.state.email)
-      NativeModules.DevSettings.reload()
+      this.setState({email: '', password: ''})
+      this.props.navigation.navigate('Other')
     }
   }
 

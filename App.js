@@ -2,10 +2,9 @@ import { StatusBar } from 'expo-status-bar'
 import React, { PureComponent, useState } from 'react'
 import { AsyncStorage } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import BottomTabNavigation from './Navigation'
 import StackNavigation from './StackNavigation'
 import { useFonts } from 'expo-font';
-
+import Events from './screens/Events'
 
 
 
@@ -30,21 +29,13 @@ export default function App(){
   console.log(data)
   if (!fontsLoaded) {
     return null;
-  } else if (data !== 'null' && data !== null){
+  } else/* if (data !== 'null' && data !== null)*/{
     
       return (
         <SafeAreaProvider>
-          <BottomTabNavigation />
-          <StatusBar backgroundColor={'#A62929'}/>
-        </SafeAreaProvider>
-      );
-  }
-  else{
-    return (
-      <SafeAreaProvider>
         <StackNavigation />
-        <StatusBar backgroundColor={'#003f5c'}/>
+        <StatusBar backgroundColor={'#A62929'}/>
       </SafeAreaProvider>
-      )
+      );
   }
 }

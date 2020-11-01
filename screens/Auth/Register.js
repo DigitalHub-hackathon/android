@@ -14,12 +14,16 @@ export default class Register extends React.Component {
     password:'',
     confirm:'',
     gender: 'male',
-    date: '2001-02-14'
+    date: '2001-02-14',
+    events: [],
+    groups: [],
+    books: []
   }
 
   async _storeData() {
     try {
       await AsyncStorage.setItem(this.state.email, JSON.stringify(this.state))
+      AsyncStorage.setItem('Active', this.state.email)
       console.log('Записал')
     } catch (error) {
       console.log(error)
@@ -128,7 +132,7 @@ export default class Register extends React.Component {
         && this.state.lastName !== '' && this.state.middleName !== '' && this.state.email !== '' ?
         <TouchableOpacity style={styles.loginBtn} onPress={() => 
             {this._storeData()
-            NativeModules.DevSettings.reload()
+            this.props.navigation.navigate('Other')
             }}>
           <Text style={styles.loginText}>ЗАРЕГИСТРИРОВАТЬСЯ</Text>
         </TouchableOpacity> :

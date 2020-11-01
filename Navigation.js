@@ -12,6 +12,23 @@ import Books from './screens/Books'
 import Events from './screens/Events'
 import Places from './screens/Places'
 import SomeEvent from './screens/SomeEvent'
+import Login from './screens/Auth/Login'
+import Register from './screens/Auth/Register'
+
+const LoginStack = createStackNavigator()
+
+export default function LoginStackNavigator(){
+    return(
+        <NavigationContainer>
+          <LoginStack.Navigator>
+            <LoginStack.Screen name='Login' component={Login} options={{headerShown: false}}/>
+            <LoginStack.Screen name='Register' component={Register} options={{headerShown: false}}/>
+            <LoginStack.Screen name='Other' component={BottomTabNavigator} options={{headerShown: false}}/>
+          </LoginStack.Navigator>
+        </NavigationContainer>
+            
+    )
+}
 
 const Stack = createStackNavigator()
 
@@ -27,19 +44,15 @@ function StackNavigator(){
 
 const BottomTab = createBottomTabNavigator()
 
-export default function BottomTabNavigator(){
-    const images = ['event', 'account', 'book', 'account']
+function BottomTabNavigator(){
     return(
-        <View style={{ flex: 1, position: "relative"}}>
-        <NavigationContainer>
             <BottomTab.Navigator tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}>
+                {/*<BottomTab.Screen name='Логин' component={LoginStackNavigator} />*/}
                 <BottomTab.Screen name='Мероприятия' component={StackNavigator} />
                 <BottomTab.Screen name='Кружки' component={Places} />
                 {/*<BottomTab.Screen name='Книги' component={Books} />*/}
                 <BottomTab.Screen name='Профиль' component={AboutMe} />
             </BottomTab.Navigator>
-        </NavigationContainer>
-        </View>
     )
 }
 

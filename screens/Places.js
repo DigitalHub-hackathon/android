@@ -11,7 +11,8 @@ export default class Places extends PureComponent {
         organizations: [],
         liked_organizations: [],
         visible: false,
-        likes: ''
+        likes: '',
+        liked: []
     }
 
     async componentDidMount(){
@@ -40,7 +41,12 @@ export default class Places extends PureComponent {
         else{
             this.setState({likes: this.state.likes + '%20' + this.state.organizations[Number(info)].id})
         }
-        console.log(this.state.likes)
+        
+        var array = this.state.liked
+        array = array.push(this.state.organizations[Number(info)])
+        this.setState({liked: array})
+
+        AsyncStorage.setItem(email + "_groups", JSON.stringify(this.state.liked))
     }
 
     render(){

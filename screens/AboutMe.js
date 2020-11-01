@@ -26,6 +26,13 @@ export default class AboutMe extends PureComponent {
             console.log(this.state.user)
           this.setState({email: email, fio: this.state.user.lastName + ' ' + this.state.user.firstName + ' ' + this.state.user.middleName, password: this.state.user.password, gender: this.state.user.gender, date: this.state.user.date})
           
+          const events = await AsyncStorage.getItem(this.state.email + "_events")
+          this.setState({my_events: JSON.parse(events)})
+
+          const groups = await AsyncStorage.getItem(this.state.email + "_groups")
+          this.setState({my_groups: JSON.parse(groups)})
+
+          console.log(this.state)
         } catch (error) {
           // Error retrieving data
         }
@@ -50,7 +57,7 @@ export default class AboutMe extends PureComponent {
 
     async exit(){
         await AsyncStorage.setItem('Active', 'null')
-        NativeModules.DevSettings.reload()
+        this.props.navigation.navigate('Login')
     }
 
     render(){
@@ -71,6 +78,23 @@ export default class AboutMe extends PureComponent {
                     </View>
                     <View style={{ width: '90%', borderRadius: 15, backgroundColor: '#465881', marginTop: 20, alignSelf: 'center'}}>
                         <Text style={{ fontFamily: 'Yanone', color: 'white', fontSize: 25, textAlign: 'center', marginTop: 10, marginBottom: 10, width: '100%'}}>{this.state.email}</Text>
+                    </View>
+                    <View style={{ height: 180, width: '90%', backgroundColor: '#465881', marginTop: 20, alignSelf: 'center', borderRadius: 15}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Моё', {params: 0})}>
+                        <View style={{ height: 60, width: '100%', borderBottomWidth: 2, borderColor: '#003f5c'}}>
+                            <Text style={{ fontFamily: 'Yanone', color: 'white', fontSize: 25, textAlign: 'center', marginTop: 10, marginBottom: 10, width: '100%'}}>Мои мероприятия</Text>
+                        </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Моё', {params: 1})}>
+                        <View style={{ height: 60, width: '100%', borderBottomWidth: 2, borderColor: '#003f5c'}}>
+                            <Text style={{ fontFamily: 'Yanone', color: 'white', fontSize: 25, textAlign: 'center', marginTop: 10, marginBottom: 10, width: '100%'}}>Мои кружки</Text>
+                        </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Моё', {params: 2})}>
+                        <View style={{ height: 60, width: '100%'}}>
+                            <Text style={{ fontFamily: 'Yanone', color: 'white', fontSize: 25, textAlign: 'center', marginTop: 10, marginBottom: 10, width: '100%'}}>Мои книги</Text>
+                        </View>
+                        </TouchableOpacity>
                     </View>
                     <TouchableOpacity onPress={() => this.exit()}>
                         <View style={{ width: '50%', borderRadius: 15, backgroundColor: '#FF5757', marginTop: 20, alignSelf: 'center'}}>
